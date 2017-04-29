@@ -1,0 +1,8 @@
+{
+    "name": "openui5-realtime-map",
+    "version": "0.0.1",
+    "devDependencies": {
+        "grunt": "^0.4.5",
+        "grunt-openui5": "^0.12.0"
+    }
+}
