@@ -36,8 +36,8 @@
                 if (i == aCoordinates.length) {
                     i = 0;
                 }
-                window.setTimeout(arguments.callee, 1000);
-            }, 1000);
+                window.setTimeout(arguments.callee, 100);
+            }, 100);
         }
         sap.ui.getCore().attachInit(function() {
             sap.ui.define(["ol", "incentergy/model/XMPPJSONPatchSyncModel", "sap/m/MessageToast"], function(ol, XMPPJSONPatchSyncModel, MessageToast) {
