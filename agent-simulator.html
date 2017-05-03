@@ -19,13 +19,15 @@
         });
 
         function sendPoint(oModel, sAgent, aCoordinates, i) {
-            oModel.addItem({
+            var oItem = {
                 time: new Date().getTime(),
                 agent: sAgent,
                 longitude: aCoordinates[i][0],
                 latitude: aCoordinates[i][1],
                 crs: '3857'
-            });
+            };
+            // console.debug(oItem);
+            oModel.addItem(oItem);
         }
 
         function sendPoints(oModel, sAgent, aCoordinates) {
@@ -36,8 +38,8 @@
                 if (i == aCoordinates.length) {
                     i = 0;
                 }
-                window.setTimeout(arguments.callee, 100);
-            }, 100);
+                window.setTimeout(arguments.callee, 1000);
+            }, 1000);
         }
         sap.ui.getCore().attachInit(function() {
             sap.ui.define(["ol", "incentergy/model/XMPPJSONPatchSyncModel", "sap/m/MessageToast"], function(ol, XMPPJSONPatchSyncModel, MessageToast) {
