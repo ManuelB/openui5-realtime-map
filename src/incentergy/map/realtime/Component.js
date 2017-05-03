@@ -32,7 +32,7 @@ sap.ui.define([
                 // - Anonymous authentification https://xmpp.org/extensions/xep-0175.html
                 // - Publish Subscribe https://xmpp.org/extensions/xep-0060.html
                 // - WebSockets a.k.a Bidirectional-streams Over Synchronous HTTP (BOSH) https://xmpp.org/extensions/xep-0124.html https://tools.ietf.org/html/rfc7395
-                var oXMPPJSONPatchSyncModel = new XMPPJSONPatchSyncModel("wss://localhost:5280/websocket", window.location.hash.replace(/#/, ''));
+                var oXMPPJSONPatchSyncModel = new XMPPJSONPatchSyncModel("ws://localhost:5281/websocket", window.location.hash.replace(/#/, ''));
                 this.setModel(oXMPPJSONPatchSyncModel);
                 oXMPPJSONPatchSyncModel.attachEvent("connectionStatus", function(oEvent) {
                     if (oEvent.getParameter("status" == "CONNECTED")) {

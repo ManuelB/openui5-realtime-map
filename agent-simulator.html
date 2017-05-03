@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Simulator Koblenzer Stadtwald und Brückenrunde</title>
+    <script id='sap-ui-bootstrap' src='https://openui5.hana.ondemand.com/1.44.9/resources/sap-ui-core.js' data-sap-ui-resourceroots='{
+        "incentergy.model": "./libs/incentergy/model",
+        "incentergy.ol": "./libs/incentergy/ol",
+        "ol": "https://cdnjs.cloudflare.com/ajax/libs/ol3/4.1.0/ol",
+        "strophe" : "https://cdnjs.cloudflare.com/ajax/libs/strophe.js/1.2.13/strophe"}' data-sap-ui-theme='sap_belize' data-sap-ui-libs='sap.m,incentergy.model,incentergy.ol' data-sap-ui-compatVersion='edge' data-sap-ui-preload='async'>
+    </script>
+
+    <script>
+        window.addEventListener("unhandledrejection", function(err, promise) {
+            // handle error here, for example log
+            console.log(err);
+        });
+
+        function sendPoint(oModel, sAgent, aCoordinates, i) {
+            oModel.addItem({
+                time: new Date().getTime(),
+                agent: sAgent,
+                longitude: aCoordinates[i][0],
+                latitude: aCoordinates[i][1],
+                crs: '3857'
+            });
+        }
+
+        function sendPoints(oModel, sAgent, aCoordinates) {
+            var i = 0;
+            window.setTimeout(function() {
+                sendPoint(oModel, sAgent, aCoordinates, i);
+                i++;
+                if (i == aCoordinates.length) {
+                    i = 0;
+                }
+                window.setTimeout(arguments.callee, 1000);
+            }, 1000);
+        }
+        sap.ui.getCore().attachInit(function() {
+            sap.ui.define(["ol", "incentergy/model/XMPPJSONPatchSyncModel", "sap/m/MessageToast"], function(ol, XMPPJSONPatchSyncModel, MessageToast) {
+                // Use a public XMPP server from https://list.jabber.at/ or https://xmpp.net/directory.php
+                // We will need:
+                // - Anonymous authentification https://xmpp.org/extensions/xep-0175.html
+                // - Publish Subscribe https://xmpp.org/extensions/xep-0060.html
+                // - WebSockets a.k.a Bidirectional-streams Over Synchronous HTTP (BOSH) https://xmpp.org/extensions/xep-0124.html https://tools.ietf.org/html/rfc7395
+                var oXMPPJSONPatchSyncModel = new XMPPJSONPatchSyncModel("ws://localhost:5281/websocket", window.location.hash.replace(/#/, ''), undefined, undefined, true);
+                oXMPPJSONPatchSyncModel.attachEvent("connectionStatus", function(oEvent) {
+                    if (oEvent.getParameter("status") == "CONNECTED") {
+                        MessageToast.show("XMPP Synchronization established");
+                        Promise.all([$.get("test/resources/Koblenz-Brueckenrunde.wkt").promise(), $.get("test/resources/Koblenz-Stadtwald.wkt").promise()]).then(function(responses) {
+                            var formatWKT = new ol.format.WKT();
+                            var Brueckenrunde = formatWKT.readFeature(responses[0]);
+                            var Stadtwald = formatWKT.readFeature(responses[1]);
+
+                            sendPoints(oXMPPJSONPatchSyncModel, "Brueckenrunde", Brueckenrunde.getGeometry().getCoordinates());
+                            sendPoints(oXMPPJSONPatchSyncModel, "Stadtwald", Stadtwald.getGeometry().getCoordinates());
+                        });
+                    }
+                });
+                oXMPPJSONPatchSyncModel.connect();
+            });
+        });
+    </script>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body class='sapUiBody' id='content'>
+</body>
+
+</html>

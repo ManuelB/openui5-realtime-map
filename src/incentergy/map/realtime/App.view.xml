@@ -21,7 +21,7 @@
                 <layer:Vector>
                     <source:Vector features="{/items}">
                         <source:features>
-                            <ol:Feature wkt="{location}" />
+                            <ol:Feature wkt="POINT({longitude} {latitude})" CRS="{crs}" />
                         </source:features>
                     </source:Vector>
                 </layer:Vector>

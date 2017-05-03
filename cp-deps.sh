@@ -1,5 +1,6 @@
 #!/bin/bash
-mkdir -p libs/incentergy/ol
-cp ../openui5-ol/dist/incentergy/ol/library-preload.js libs/incentergy/ol/
-mkdir -p libs/incentergy/model
-cp ../XMPPJSONPatchSyncModel/dist/incentergy/model/library-preload.js libs/incentergy/model/
+mkdir -p libs/incentergy/
+cp -R ../openui5-ol/dist/incentergy/ol/ libs/incentergy/
+cp -R ../openui5-ol/src/incentergy/ol/ libs/incentergy/
+cp -R ../XMPPJSONPatchSyncModel/dist/incentergy/model/ libs/incentergy/
+cp -R ../XMPPJSONPatchSyncModel/src/incentergy/model/ libs/incentergy/
