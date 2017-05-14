@@ -35,7 +35,7 @@ sap.ui.define([
                 var oXMPPJSONPatchSyncModel = new XMPPJSONPatchSyncModel("ws://localhost:5281/websocket", window.location.hash.replace(/#/, ''));
                 this.setModel(oXMPPJSONPatchSyncModel);
                 oXMPPJSONPatchSyncModel.attachEvent("connectionStatus", function(oEvent) {
-                    if (oEvent.getParameter("status" == "CONNECTED")) {
+                    if (oEvent.getParameter("status") == "CONNECTED") {
                         MessageToast.show("XMPP Synchronization established");
                     }
                 });
