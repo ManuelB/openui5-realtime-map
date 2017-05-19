@@ -78,6 +78,9 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', 'sap/ui/model/Co
                     // log error 
                     console.log(e);
                 });
+
+                // Set max size a lot higher than normal
+                this.setSizeLimit(1048576);
             },
 
             metadata: {}
@@ -416,11 +419,14 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', 'sap/ui/model/Co
          */
         XMPPJSONPatchSyncModel.prototype.onMessage = function(oMessage) {
             var values = oMessage.getElementsByTagName("value");
+            if (values.length === 0) {
+                return true;
+            }
             if (values.length == 1) {
                 var itemText = values[0].textContent;
                 this.processItem(itemText);
             } else {
-                jQuery.sap.log.warning("Expected length of values to be 1 but is: " + values);
+                jQuery.sap.log.warning("Expected length of values to be 1 but is: " + values.length);
             }
             this.checkUpdate();
 
@@ -627,6 +633,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', 'sap/ui/model/Co
                 jQuery.sap.log.warning("This model only supports an items array");
                 return undefined;
             }
+            jQuery.sap.measure.start(this.getId() + "---_getObject", "_getObject of " + sPath, ["XMPPJsonPatchSyncModel"]);
 
             var me = this;
 
@@ -644,6 +651,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', 'sap/ui/model/Co
                 oNode = oContext;
             }
             if (!sPath) {
+                jQuery.sap.measure.end(this.getId() + "---_getObject");
                 return oNode;
             }
             var aParts = sPath.split("/"),
@@ -656,6 +664,7 @@ sap.ui.define(['jquery.sap.global', 'sap/ui/model/ClientModel', 'sap/ui/model/Co
                 oNode = oNode[aParts[iIndex]];
                 iIndex++;
             }
+            jQuery.sap.measure.end(this.getId() + "---_getObject");
             return oNode;
         };
 

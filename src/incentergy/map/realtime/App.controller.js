@@ -16,6 +16,19 @@ sap.ui.define([
             if (extent) {
                 map.viewFit(extent);
             }
+        },
+        onSendOnLocation: function() {
+            var me = this;
+            navigator.geolocation.watchPosition(function(geolocation) {
+                me.getOwnerComponent().getModel().addItem({
+                    time: geolocation.timestamp,
+                    agent: "Agent",
+                    longitude: geolocation.coords.longitude,
+                    latitude: geolocation.coords.latitude,
+                    /* WGS 84 */
+                    crs: '4326'
+                });
+            });
         }
     });
 });

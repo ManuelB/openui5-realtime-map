@@ -64,6 +64,8 @@ sap.ui.define(['ol', 'sap/ui/base/ManagedObject'],
                         // Map
                         var oVectorLayer = oSource.getParent();
                         oVectorLayer.mapSet().then(function() {
+                            // Start performance measure
+                            jQuery.sap.measure.start(me.getId() + "---FeatureGeneration", "FeatureGeneration of " + wkt, ["ol"]);
                             if (me._bFeatureAdded) {
                                 oSource._source.removeFeature(me._feature);
                             }
@@ -76,6 +78,9 @@ sap.ui.define(['ol', 'sap/ui/base/ManagedObject'],
                             }
                             oSource._source.addFeature(me._feature);
                             me._bFeatureAdded = true;
+
+                            // end performance measurement
+                            jQuery.sap.measure.end(me.getId() + "---FeatureGeneration");
                         })
                     })
                 })
