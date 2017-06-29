@@ -14,7 +14,8 @@ sap.ui.define(['ol', './Source'],
                         multiple: true,
                         singularName: "feature"
                     }
-                }
+                },
+                defaultAggregation: "features"
             },
             constructor: function() {
                 Source.apply(this, arguments);
